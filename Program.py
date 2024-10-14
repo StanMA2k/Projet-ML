@@ -28,3 +28,5 @@ def show_random_image(X_data, Y_data, num_img=None):
         plt.show()
 
 show_random_image(X_train, Y_train, num_img=3)
+
+sjkabdbdssab
