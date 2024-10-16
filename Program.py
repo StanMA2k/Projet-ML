@@ -79,8 +79,27 @@ ConvKernel_size = (3,3)       #Size of filters in convolution layer
 filter = 32                 #number of filters in convolutional layer
 Pool_kernel = (2,2)   #Size of filters in pooling layer
 
-def accuracy(y_true, y_pred):
-    return y_pred.argmax(axis=-1) == y_true.argmax(axis=-1)
+class CrossEntropy:
+    def __init__(self): pass
+
+    def loss(self, y, p):
+        '''Cross-Entropy Loss function for multiclass predictions'''
+        p = np.clip(p, 1e-15, 1 - 1e-15)
+        return -np.sum(y * np.log(p))
+
+    def acc(self, y, p):
+        ''' Accuracy between One-hot encoding : target value 'y' and predicted 'p' '''
+        # np.argmax translates to nominal values, for each entry.
+        # the whole values are given to %accuracy function
+        accuracy = np.argmax(y, axis=1), np.argmax(p, axis=1)
+        return accuracy
+
+    def gradient(self, y, p):
+        '''Gradient of Cross-Entropy function with respect to the input of softmax, not the softmax output itself'''
+        p = np.clip(p, 1e-15, 1 - 1e-15)
+        return p - y  # This is the gradient for the input to softmax
+
+
 
 # Gradient descending algo
 class GDA():
