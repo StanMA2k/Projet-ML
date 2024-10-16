@@ -72,7 +72,7 @@ plt.show()
 
 #------------ Parameters -----------#
 learningRate = 0.01
-maxIter = 100
+maxIter = 5
 
 nHidden = 128        #Number of neurones in hidden layer
 ConvKernel_size = (3,3)       #Size of filters in convolution layer
