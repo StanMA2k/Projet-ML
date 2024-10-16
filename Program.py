@@ -68,6 +68,66 @@ plt.show()
 
 
 
+#%% Model construction
+
+#------------ Parameters -----------#
+learningRate = 0.01
+maxIter = 100
+
+nHidden = 128        #Number of neurones in hidden layer
+ConvKernel_size = (3,3)       #Size of filters in convolution layer
+filter = 32                 #number of filters in convolutional layer
+Pool_kernel = (2,2)   #Size of filters in pooling layer
+
+def accuracy(y_true, y_pred):
+    return y_pred.argmax(axis=-1) == y_true.argmax(axis=-1)
+
+# Gradient descending algo
+class GDA():
+    def __call__(self, X,y):
+        n_samples,n_features = X.shape
+        self.weights = np.random.randn(n_features)
+        self.bias = 0
+        self.lr = learningRate
+
+        for i in range (maxIter):
+            y_pred = np.dot(X,y) + y
+            dw = (1 / n_samples) * np.dot(X.T, (y_pred - y))
+            db = (1 / n_samples) * np.sum(y_pred - y)
+
+            # update parameters using the gradients
+            self.weights = self.weights - self.lr * dw
+            self.bias = self.bias - self.lr * db
+
+#  Sigmoid activation function
+class Sigmoid():
+    def __call__(self, X):
+        return 1 / (1 + np.exp(-X))
+    def gradient(self, X):
+        return self.__call__(X) * (1 - self.__call__(X))
+
+# ReLU activation function
+class ReLU():
+    def __call__(self, X):
+        return np.maximum(0, X)
+
+    def gradient(self, X):
+        return 1. * (X > 0)
+
+# Softmax activation function
+class Softmax():
+    def __call__(self, X):
+        e_x = np.exp(X - np.max(X, axis=1, keepdims=True))
+        return e_x / e_x.sum(axis=1, keepdims=True)
+
+    def gradient(self, X):
+        return self.__call__(X) * (1 - self.__call__(X))
+
+
+
+
+
+
 
 
 
