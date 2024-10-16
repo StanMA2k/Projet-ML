@@ -8,7 +8,10 @@ from sklearn.model_selection import train_test_split
 #%% Task 1
 #load dataset and output dataset shape
 (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
-
+print(X_train.shape)
+print(Y_train.shape)
+print(X_test.shape)
+print(Y_test.shape)
 
 #%% Task 2
 #class label
