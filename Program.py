@@ -3,6 +3,11 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from keras.src.datasets import mnist
 from sklearn.model_selection import train_test_split
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.optimizers import Adam
+
+
 
 
 #%% Task 1
@@ -146,8 +151,67 @@ class Softmax():
         return self.__call__(X) * (1 - self.__call__(X))
 
 
+#%% LeNet 5
+def LeNet5(X_train, y_train, X_test, y_test, opt="SGD"):
+    model = tf.keras.models.Sequential()
+
+    model.add(tf.keras.layers.InputLayer(input_shape=(32, 32, 3)))
+
+    model.add(tf.keras.layers.Conv2D(filters=6, kernel_size=(5, 5), activation='relu'))
+    model.add(tf.keras.layers.AvgPool2D())
+
+    model.add(tf.keras.layers.Conv2D(filters=16, kernel_size=(5, 5), activation='relu'))
+    model.add(tf.keras.layers.AvgPool2D())
+
+    model.add(tf.keras.layers.Conv2D(filters=120, kernel_size=(5, 5), activation='relu'))
+
+    model.add(tf.keras.layers.Flatten())
+
+    model.add(tf.keras.layers.Dense(units=84, activation='relu'))
+
+    model.add(tf.keras.layers.Dense(units=10, activation='softmax'))
+
+    model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+
+    model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
+
+    return model
+
+X_train = X_train.reshape(-1, 32, 32, 3)
+X_test  = X_test.reshape(-1, 32, 32, 3)
+
+y_train = tf.keras.utils.to_categorical(Y_train, 10)
+y_test  = tf.keras.utils.to_categorical(Y_test, 10)
+
+cnn = LeNet5(X_train, y_train, X_test, y_test, opt="SGD")
 
 
+#%% VGG1
+
+y_train_onehot = to_categorical(Y_train, num_classes=10)
+y_test_onehot = to_categorical(Y_test, num_classes=10)
+
+def create_vgg1_one_conv_adam():
+    model = Sequential()
+
+    model.add(Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=(32, 32, 3)))
+    model.add(MaxPooling2D((2, 2)))
+
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(10, activation='softmax'))
+
+    model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+vgg1_one_conv = create_vgg1_one_conv_adam()
+history_vgg1_one_conv = vgg1_one_conv.fit(X_train, y_train_onehot, validation_data=(X_test, y_test_onehot), epochs=10, batch_size=64)
+
+#%% VGG2
+
+
+#%% VGG3
 
 
 
