@@ -210,9 +210,67 @@ history_vgg1_one_conv = vgg1_one_conv.fit(X_train, y_train_onehot, validation_da
 
 #%% VGG2
 
+def build_vgg2():
+    model = Sequential()
+
+    # first VGG Block
+    model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
+    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+
+    # second VGG Block
+    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
+    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+
+    # hidden layer
+    model.add(layers.Flatten())
+    model.add(layers.Dense(128, activation='relu'))
+
+    # output layer 
+    model.add(layers.Dense(10, activation='softmax'))
+
+    return model
+
+# build and compile the model
+vgg2_model = build_vgg2()
+vgg2_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+
 
 #%% VGG3
+from tensorflow.keras import layers, models
 
+def create_vgg3_model(input_shape=(32, 32, 3), num_classes=10):
+    model = models.Sequential()
+
+    # first VGG bloc 
+    model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
+    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+
+    # second VGG bloc 
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+
+    # third VGG bloc
+    model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+    model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+
+    # fully connected layer
+    model.add(layers.Flatten())
+    model.add(layers.Dense(128, activation='relu'))
+    model.add(layers.Dense(num_classes, activation='softmax'))
+
+    return model
+
+
+vgg3_model = create_vgg3_model()
+
+# Compile model
+vgg3_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 
 
